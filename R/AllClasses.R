@@ -1,0 +1,12 @@
+setClass("RococoTestResults",
+         representation=representation(count="integer",
+                                       tnorm="list",
+                                       input="character",
+                                       length="numeric",
+                                       p.value="numeric",
+                                       r.values="numeric",
+                                       numtests="integer",
+                                       similarity="character",
+                                       sample.gamma="numeric",
+                                       H0gamma.sd="numeric",
+                                       alternative="character"))

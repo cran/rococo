@@ -1,0 +1,9 @@
+useDynLib(rococo)
+
+importFrom("methods")
+importFrom("methods", "show")
+
+export("rococo")
+
+exportClasses("RococoTestResults")
+exportMethods("show", "rococo.test")
