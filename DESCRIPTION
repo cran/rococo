@@ -1,8 +1,8 @@
 Package: rococo
 Type: Package
 Title: RObust rank COrrelation COefficient and test
-Version: 1.0.0
-Date: 2011-10-03
+Version: 1.0.1
+Date: 2011-10-24
 Author: Martin Krone, Ulrich Bodenhofer
 Maintainer: Ulrich Bodenhofer <rococo@bioinf.jku.at>
 Description: The rococo package provides a robust gamma rank
@@ -18,6 +18,6 @@ Collate: AllGenerics.R AllClasses.R show-methods.R rococo.R
         rococo.test-methods.R
 URL: http://www.bioinf.jku.at/software/rococo/
 LinkingTo: Rcpp
-Packaged: 2011-10-03 11:58:55 UTC; bodenhof
+Packaged: 2011-10-24 11:46:13 UTC; bodenhof
 Repository: CRAN
-Date/Publication: 2011-10-03 14:59:32
+Date/Publication: 2011-10-24 13:37:54

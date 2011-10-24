@@ -527,16 +527,18 @@ rococo(x2, y2, tnorm=YagertNorm(0.5))
 rococo.test(x2, y2, tnorm=YagertNorm(0.2))
 @
 
-Note that the \RoCoCo\ package performs only a few basic checks on a user-defined
-t-norm. It remains the duty of the user to ensure that the function is
-actually a valid t-norm.
+Note that the \RoCoCo\ package performs only a few basic checks on a
+user-defined t-norm. It remains the duty of the user to ensure that the
+function is actually a valid t-norm.
 
 The three built-in t-norms (see Table\ \ref{tab:tnorm}) are efficiently
 implemented in C++ and called with the help of the \Rcpp\ package
 \cite{EddelbuettelFrancois11} while user-defined t-norms have to be evaluated in
 \R\ loops. Even though we use the \texttt{compiler} package (if available)
 to pre-compile the user-defined t-norm, this may still result in a
-drastic slowdown of computations, particularly for larger data sets.
+drastic slowdown of computations, particularly for larger data sets or
+when using \texttt{rococo.test()} with \texttt{exact=TRUE} (see end of
+next section).
 
 \section{A Note on Permutation Testing}
 
@@ -600,7 +602,9 @@ a slot \texttt{count} which corresponds to the number of times
     correlation.
 \end{itemize}
 This count allows for an alternative method of determining a $p$-value as
-a relative frequency.
+a relative frequency. Users who want to use this method can compute the
+$p$-value as the quotient of the above count (slot \texttt{count})
+over the number of trials (slot \texttt{numtests}).
 
 The number of shuffles performed by \texttt{rococo.test()} is controlled by
 the parameter \texttt{numtests} (the default is 1000). It is clear that,
@@ -613,9 +617,40 @@ stringest significance thresholds, it may be necessary to perform much higher
 numbers of shuffles. Needless to mention, this will also result in an
 increase of computation times, where the computation time grows linearly
 with the number of shuffles.
-<<LargeNoShuffles>>=
-rococo.test(x2, y2, numtests=10000)
+
+Here is an example with 100,000 shuffles, where we use the option
+\texttt{storeValue=TRUE} to get access to the rank correlation values for
+all random shuffles:
+\begin{center}
+<<LargeNoShuffles,fig=TRUE,echo=TRUE,width=5,height=5>>=
+res <- rococo.test(x2, y2, numtests=100000, storeValues=TRUE)
+res
+hist(res@perm.gamma, breaks=100, probability=TRUE, xlab="gamma",
+     main="Distribution of gamma for random shuffles")
+plot(function(x) dnorm(x, mean=0, sd=res@H0gamma.sd), min(res@perm.gamma),
+     max(res@perm.gamma), col="red", lwd=3, add=TRUE)
 @
+\end{center}
+The histogram and the density of the corresponding normal distribution
+(red curve) match almost perfectly.
+
+For small data sets (not more than 10 samples), the package further
+provides computations of {\em exact $p$-values}. This can be
+enforced by passing the argument \texttt{exact=TRUE} to \texttt{rococo.test()}.
+In this case, {\em all possible permutations} are considered (using the
+Steinhaus-Johnson-Trotter algorithm; see, e.g., \cite{Sedgewick77})
+and the exact $p$-value is computed as the quotient of the above count (slot
+\texttt{count}) over the number of trials (the factorial of the length of
+\texttt{x} and \texttt{y}):
+<<ExactpValueExample>>=
+rococo.test(x2[1:8], y2[1:8], exact=TRUE)
+@
+
+Using the exact test for 10 samples results in $10!=\Sexpr{factorial(10)}$
+permutations that have to be considered. For the built-in t-norms, such a
+computation should finish within a few seconds. However, in conjunction with
+a user-defined t-norm, computations may be significantly longer, in the
+range of several minutes.
 
 \section{How to Cite This Package}
 
@@ -717,6 +752,11 @@ W.\ H. Kruskal.
 K.\ Pearson.
 \newblock Notes on the history of correlation.
 \newblock {\em Biometrika}, 13:25--45, 1920.
+
+\bibitem{Sedgewick77}
+R.\ Sedgewick.
+\newblock Permutation generation methods.
+\newblock {\em ACM Comput. Surv.}, 9(2):137--164, 1977.
 
 \bibitem{Spearman04}
 C.\ Spearman.

@@ -1,6 +1,7 @@
 rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
                                                    "epstol", "classical"),
                                 tnorm="min", r=0, numtests=1000,
+                                storeValues=FALSE, exact=FALSE,
                                 alternative=c("two.sided", "less", "greater"))
 {
      if (!is.numeric(x) || !is.numeric(y) || length(x) != length(y))
@@ -12,6 +13,21 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
      if (missing(similarity))
          similarity <- "linear"
 
+     if (!is.logical(exact) || length(exact) > 1)
+         stop("exact must be single logical")
+
+     if (exact)
+     {
+         if (length(x) > 10)
+         {
+             warning("exact test intractable for more than 10 samples;",
+                     " setting exact=FALSE")
+             exact <- FALSE
+         }
+         else
+             numtests <- factorial(length(x))
+     }
+
      similarity <- match.arg(similarity, several.ok=TRUE)
      alternative <- match.arg(alternative)
      altId <- switch(alternative, two.sided=0, less=1, greater=2)
@@ -22,9 +38,12 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
      if (!is.numeric(numtests) || length(numtests) > 1 || numtests < 1 ||
          numtests != floor(numtests))
          stop("numtests must by a single positive integer")
-     else if (numtests < 100)
+     else if (numtests < 100 && !exact)
          warning("for the sake of significance, it is not recommend to use",
                  "numtests < 100")
+
+     if (!is.logical(storeValues) || length(storeValues) > 1)
+         stop("storeValues must be single logical")
 
      rcorFunc <- ""
      rcorTestFunc <- ""
@@ -34,7 +53,11 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
          tnorm <- match.arg(tnorm, c("min", "prod", "lukasiewicz"))
 
          rcorFunc <- paste("rcor_", tnorm, sep = "")
-         rcorTestFunc <- paste("rcor_permtest_", tnorm, sep = "")
+
+         if (exact)
+             rcorTestFunc <- paste("rcor_exacttest_", tnorm, sep = "")
+         else
+             rcorTestFunc <- paste("rcor_permtest_", tnorm, sep = "")
 
          tnlist <- list(name=tnorm)
      }
@@ -111,24 +134,61 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
      {
          samples <- vector(mode="numeric", length=numtests)
 
-         i <- 1
-         while (i <= numtests)
+         if (exact)
          {
-             perm <- sample(1:length(x))
-             c <- sum(mapply(tnorm, Rx, Ry[perm, perm]))
-             d <- sum(mapply(tnorm, Rx, t(Ry[perm, perm])))
-             newgamma <- ifelse(c + d == 0, 0, (c - d) / (c + d))
+             perm <- 1:length(x)
+             sigt <- rep(as.integer(-1), length(x))
 
-             samples[i] <- newgamma
+             i <- 1
+             repeat
+             {
+                 c <- sum(mapply(tnorm, Rx, Ry[perm, perm]))
+                 d <- sum(mapply(tnorm, Rx, t(Ry[perm, perm])))
+                 newgamma <- ifelse(c + d == 0, 0, (c - d) / (c + d))
 
-             if (identical(altId, 0) && abs(newgamma) >= abs(oldgamma))
-                 cnt <- cnt + 1
-             else if (identical(altId, 1) && newgamma <= oldgamma)
-                 cnt <- cnt + 1
-             else if (identical(altId, 2) && newgamma >= oldgamma)
-                 cnt <- cnt + 1
+                 samples[i] <- newgamma
 
-             i <- i + 1
+                 if (identical(altId, 0) && abs(newgamma) >= abs(oldgamma))
+                     cnt <- cnt + 1
+                 else if (identical(altId, 1) && newgamma <= oldgamma)
+                     cnt <- cnt + 1
+                 else if (identical(altId, 2) && newgamma >= oldgamma)
+                     cnt <- cnt + 1
+
+                 ret <- .Call("permNextWrapper", perm, sigt)
+
+                 if (is.null(ret))
+                     break
+                 else
+                 {
+                     perm <- ret$perm
+                     sigt <- ret$sign
+                 }
+
+                 i <- i + 1
+             }
+         }
+         else
+         {
+             i <- 1
+             while (i <= numtests)
+             {
+                 perm <- sample.int(length(x))
+                 c <- sum(mapply(tnorm, Rx, Ry[perm, perm]))
+                 d <- sum(mapply(tnorm, Rx, t(Ry[perm, perm])))
+                 newgamma <- ifelse(c + d == 0, 0, (c - d) / (c + d))
+
+                 samples[i] <- newgamma
+
+                 if (identical(altId, 0) && abs(newgamma) >= abs(oldgamma))
+                     cnt <- cnt + 1
+                 else if (identical(altId, 1) && newgamma <= oldgamma)
+                     cnt <- cnt + 1
+                 else if (identical(altId, 2) && newgamma >= oldgamma)
+                     cnt <- cnt + 1
+
+                 i <- i + 1
+             }
          }
 
          sampleSD <- sqrt(mean(samples^2))
@@ -137,17 +197,25 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
      {
           res <- .Call(rcorTestFunc, Rx, Ry,
                        as.integer(numtests), as.double(oldgamma),
-                       as.integer(altId))
+                       as.integer(altId), storeValues)
           cnt <- res$cnt
           sampleSD <- res$H0sd
+          if (storeValues)
+              samples <- res$values
      }
 
-     if (alternative == "greater")
-         pval <- pnorm(oldgamma, mean=0, sd=sampleSD, lower.tail=FALSE)
-     else if (alternative == "less")
-         pval <- pnorm(oldgamma, mean=0, sd=sampleSD, lower.tail=TRUE)
+     if (exact)
+         pval <- cnt / numtests
      else
-         pval <- 2 * pnorm(abs(oldgamma), mean=0, sd=sampleSD, lower.tail=FALSE)
+     {
+         if (alternative == "greater")
+             pval <- pnorm(oldgamma, mean=0, sd=sampleSD, lower.tail=FALSE)
+         else if (alternative == "less")
+             pval <- pnorm(oldgamma, mean=0, sd=sampleSD, lower.tail=TRUE)
+         else
+             pval <- 2 * pnorm(abs(oldgamma), mean=0, sd=sampleSD,
+                               lower.tail=FALSE)
+     }
 
      new("RococoTestResults",
          count=as.integer(cnt),
@@ -155,12 +223,15 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
          input=paste(deparse(substitute(x, env=parent.frame())), "and",
                      deparse(substitute(y, env=parent.frame()))),
          length=length(x),
-         p.value=(cnt / numtests),
+         p.value=pval,
          r.values=r[1:2],
          numtests=as.integer(numtests),
+         exact=as.logical(exact),
          similarity=similarity,
          sample.gamma=oldgamma,
          H0gamma.sd=sampleSD,
+         perm.gamma=if (storeValues) samples
+                    else vector(mode="numeric", length=0),
          alternative=alternative)
 }
 

@@ -35,11 +35,20 @@ setMethod("show", signature(object="RococoTestResults"),
                    greater="true gamma is greater than 0",
                    less="true gamma is less than 0"), "\n")
         cat("sample gamma =", object@sample.gamma, "\n")
-        cat("estimated p-value = ",
-            ifelse(object@p.value < .Machine$double.eps,
-                   paste("<", format(.Machine$double.eps, digits=2)),
-                         object@p.value),
-            " (", object@count, " of ",
-            object@numtests, " values)\n\n", sep = "")
+
+        if (object@exact)
+            cat("exact p-value = ",
+                ifelse(object@p.value < .Machine$double.eps,
+                       paste("<", format(.Machine$double.eps, digits=2)),
+                       object@p.value),
+                " (", object@count, " of ",
+                object@numtests, " values)\n\n", sep = "")
+        else
+            cat("estimated p-value = ",
+                ifelse(object@p.value < .Machine$double.eps,
+                       paste("<", format(.Machine$double.eps, digits=2)),
+                       object@p.value),
+                " (", object@count, " of ",
+                object@numtests, " values)\n\n", sep = "")
      }
 )

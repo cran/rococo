@@ -1,21 +1,22 @@
 #include "tnorms.h"
 
+// minimum t-norm
 
-// Minimum-Tnorm
-double min_tnorm (double in1, double in2)
+double min_tnorm(double in1, double in2)
 {
-	return MIN(in1, in2);
+    return MIN(in1, in2);
 }
 
-// Produkt-Tnorm
-double prod_tnorm (double in1, double in2)
+// product t-norm
+
+double prod_tnorm(double in1, double in2)
 {
-	return in1 * in2;
+    return in1 * in2;
 }
  
-// Lukasiewicz-Tnorm
-double lukasiewicz_tnorm (double in1, double in2)
-{
-	return MAX(0, in1 + in2 - 1);
-}
+// Lukasiewicz t-norm
 
+double lukasiewicz_tnorm(double in1, double in2)
+{
+    return MAX(0, in1 + in2 - 1);
+}

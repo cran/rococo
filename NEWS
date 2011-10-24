@@ -1,0 +1,11 @@
+Change history of package rococo:
+=================================
+
+Version 1.0.1:
+- improved estimation of p-values
+- added exact computation of p-values (only for 10 or less samples)
+- corresponding adaptations of man pages and vignette
+
+Version 1.0.0:
+- first public release
+

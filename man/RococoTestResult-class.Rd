@@ -33,8 +33,10 @@ The following slots are defined for \code{RococoTestResults} objects:
     \item{\code{r.values}:}{vector containing tolerance levels for the
       two inputs; see \code{\link{rococo.test}} or
       \code{\link{rococo}}.}
-    \item{\code{numtests}:}{number of random shuffles performed by
+    \item{\code{numtests}:}{number of (random) shuffles performed by
       \code{\link{rococo.test}}.}
+    \item{\code{exact}:}{logical indicating whether p-value has been
+      computed exactly; see \code{\link{rococo.test}}.}
     \item{\code{similarity}:}{character (vector) identifying the
       similarity measure(s) used by \code{\link{rococo.test}}.}
     \item{\code{sample.gamma}:}{test statistic (robust gamma rank
@@ -42,6 +44,9 @@ The following slots are defined for \code{RococoTestResults} objects:
       \code{\link{rococo.test}}.}
     \item{\code{H0gamma.sd}:}{empirical standard deviation (from 0) of test
       statistic for random shuffles}
+    \item{\code{perm.gamma}:}{in case \code{\link{rococo.test}} was
+      called with \code{storeValues=TRUE}, this slot contains the
+      vector of test statistics for random shuffles.}
     \item{\code{alternative}:}{alternative hypothesis used by
     \code{\link{rococo.test}}.}
   }
