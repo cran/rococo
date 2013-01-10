@@ -82,20 +82,19 @@
 \email{rococo@bioinf.jku.at}}
 \references{\url{http://www.bioinf.jku.at/software/rococo/}
 
+U. Bodenhofer, M. Krone, and F. Klawonn (2012).
+Testing noisy numerical data for monotonic association.
+\emph{Inform. Sci.}, DOI: 10.1016/j.ins.2012.11.026.
+
 U. Bodenhofer and F. Klawonn (2008).
 Robust rank correlation coefficients on the basis of fuzzy orderings:
 initial steps. \emph{Mathware Soft Comput.} \bold{15}(1):5-20.}
-\seealso{\code{\link{rococo.test}}}
+\seealso{\code{\link{rococo}}}
 \examples{
 ## create data
-f <- function(x)
-{
-  if (x > 0.9) x - 0.9
-  else if (x < -0.9) x + 0.9
-  else 0
-}
+f <- function(x) ifelse(x > 0.9, x - 0.9, ifelse(x < -0.9, x + 0.9, 0))
 x <- rnorm(25)
-y <- sapply(x, f) + rnorm(25, sd=0.1)
+y <- f(x) + rnorm(25, sd=0.1)
 
 ## perform correlation tests
 rococo.test(x, y, similarity="classical", alternative="greater")

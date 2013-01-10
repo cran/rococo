@@ -43,7 +43,7 @@ SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
     for (i = 0; i < mat_x.nrow(); i++)
 	perm[i] = i;
 
-    double gammaSqSum = 0;
+    double mean = 0, M2 = 0, delta;
 
     LogicalVector store(storeValues);
 
@@ -57,8 +57,6 @@ SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
 		
 	get_sums(mat_x, mat_y, perm, tnorm_fp, &c, &d);
 	gamma[0] = (fabs(c + d) <= DBL_EPSILON) ? 0 : (c - d) / (c + d);
-
-	gammaSqSum += (gamma[0] * gamma[0]);
 
 	if (numGamma) permGamma[i] = gamma[0];
 
@@ -74,15 +72,23 @@ SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
 	    case 1: if (gamma[0] <= old_gamma)             cnt++; break;
 	    case 2: if (gamma[0] >= old_gamma)             cnt++; break;
 	}
+
+	// computation of mean and variance according to Knuth/Welford
+
+	delta = gamma[0] - mean;
+	mean += (delta / (i + 1));
+	M2 += (delta * (gamma[0] - mean));
     }
 
     if (numGamma)
 	return List::create(_["cnt"] = cnt, _["ogamma"] = old_gamma,
-			    _["H0sd"] = sqrt(gammaSqSum / num_tests),
+			    _["H0mu"] = mean,
+			    _["H0sd"] = sqrt(M2 / (num_tests - 1)),
 	                    _["values"] = permGamma);
     else
 	return List::create(_["cnt"] = cnt, _["ogamma"] = old_gamma,
-			    _["H0sd"] = sqrt(gammaSqSum / num_tests));
+			    _["H0mu"] = mean,
+			    _["H0sd"] = sqrt(M2 / (num_tests - 1)));
 }
 
 RcppExport SEXP rcor_permtest_min(SEXP matx, SEXP maty, SEXP tests,

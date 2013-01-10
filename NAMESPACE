@@ -3,7 +3,7 @@ useDynLib(rococo)
 importFrom("methods")
 importFrom("methods", "show")
 
-export("rococo")
+export("rococo", "gauss.cor")
 
 exportClasses("RococoTestResults")
-exportMethods("show", "rococo.test")
+exportMethods("show", "rococo.test", "gauss.cor.test")

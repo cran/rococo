@@ -1,6 +1,19 @@
 citHeader("To cite package 'rococo' in publications use:")
 
 citEntry(entry="Article",
+         title="Testing noisy numerical data for monotonic association",
+         author=personList(as.person("Ulrich Bodenhofer"),
+                           as.person("Martin Krone"),
+                           as.person("Frank Klawonn")),
+         journal="Inform. Sci.",
+         year="2012",
+         doi="10.1016/j.ins.2012.11.026",
+         textVersion =
+             paste("Ulrich Bodenhofer, Martin Krone, and Frank Klawonn (2012)",
+                   "Testing noisy numerical data for monotonic association",
+                   "Inform. Sci., DOI: 10.1016/j.ins.2012.11.026"))
+
+citEntry(entry="Article",
          title=paste("Robust rank correlation coefficients on the basis of",
                      "fuzzy orderings: initial steps"),
          author=personList(as.person("Ulrich Bodenhofer"),

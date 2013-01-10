@@ -1,6 +1,13 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.0:
+- estimation of p-values now based on relative frequencies
+- Gaussian rank correlation estimator and test added
+- corresponding adaptations of man pages and vignette
+- updated citation
+- moved vignette to 'vignettes' according to the new guidelines
+
 Version 1.0.1:
 - improved estimation of p-values
 - added exact computation of p-values (only for 10 or less samples)
@@ -8,4 +15,3 @@ Version 1.0.1:
 
 Version 1.0.0:
 - first public release
-

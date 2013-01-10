@@ -1,10 +1,10 @@
 Package: rococo
 Type: Package
 Title: RObust rank COrrelation COefficient and test
-Version: 1.0.1
-Date: 2011-10-24
+Version: 1.1.0
+Date: 2013-01-10
 Author: Martin Krone, Ulrich Bodenhofer
-Maintainer: Ulrich Bodenhofer <rococo@bioinf.jku.at>
+Maintainer: Ulrich Bodenhofer <bodenhofer@bioinf.jku.at>
 Description: The rococo package provides a robust gamma rank
         correlation coefficient along with a permutation-based rank
         correlation test.  The rank correlation coefficient and the
@@ -15,9 +15,9 @@ LazyLoad: yes
 Depends: R (>= 2.12.0), Rcpp (>= 0.9.4), methods
 Suggests: compiler, datasets
 Collate: AllGenerics.R AllClasses.R show-methods.R rococo.R
-        rococo.test-methods.R
+        rococo.test-methods.R gauss.cor.R gauss.cor.test-methods.R
 URL: http://www.bioinf.jku.at/software/rococo/
 LinkingTo: Rcpp
-Packaged: 2011-10-24 11:46:13 UTC; bodenhof
+Packaged: 2013-01-10 14:16:29 UTC; bodenhof
 Repository: CRAN
-Date/Publication: 2011-10-24 13:37:54
+Date/Publication: 2013-01-10 17:32:19

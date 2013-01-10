@@ -191,7 +191,8 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
              }
          }
 
-         sampleSD <- sqrt(mean(samples^2))
+         sampleMU <- mean(samples)
+         sampleSD <- sd(samples)
      }
      else
      {
@@ -199,23 +200,20 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
                        as.integer(numtests), as.double(oldgamma),
                        as.integer(altId), storeValues)
           cnt <- res$cnt
+          sampleMU <- res$H0mu
           sampleSD <- res$H0sd
           if (storeValues)
               samples <- res$values
      }
 
-     if (exact)
-         pval <- cnt / numtests
+     pval <- cnt / numtests
+
+     if (alternative == "greater")
+         pval2 <- pnorm(oldgamma, mean=sampleMU, sd=sampleSD, lower.tail=FALSE)
+     else if (alternative == "less")
+         pval2 <- pnorm(oldgamma, mean=sampleMU, sd=sampleSD, lower.tail=TRUE)
      else
-     {
-         if (alternative == "greater")
-             pval <- pnorm(oldgamma, mean=0, sd=sampleSD, lower.tail=FALSE)
-         else if (alternative == "less")
-             pval <- pnorm(oldgamma, mean=0, sd=sampleSD, lower.tail=TRUE)
-         else
-             pval <- 2 * pnorm(abs(oldgamma), mean=0, sd=sampleSD,
-                               lower.tail=FALSE)
-     }
+         pval2 <- 2 * pnorm(abs(oldgamma), mean=sampleMU, sd=sampleSD, lower.tail=FALSE)
 
      new("RococoTestResults",
          count=as.integer(cnt),
@@ -224,11 +222,13 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
                      deparse(substitute(y, env=parent.frame()))),
          length=length(x),
          p.value=pval,
+         p.value.approx=pval2,
          r.values=r[1:2],
          numtests=as.integer(numtests),
          exact=as.logical(exact),
          similarity=similarity,
          sample.gamma=oldgamma,
+         H0gamma.mu=sampleMU,
          H0gamma.sd=sampleSD,
          perm.gamma=if (storeValues) samples
                     else vector(mode="numeric", length=0),
