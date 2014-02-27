@@ -5,7 +5,8 @@
    Compute the robust gamma rank correlation coefficient
 }
 \usage{
-rococo(x, y, similarity=c("linear", "exp", "gauss", "epstol", "classical"), tnorm="min", r=0)
+rococo(x, y, similarity=c("linear", "exp", "gauss", "epstol", "classical"),
+       tnorm="min", r=0)
 }
 \arguments{
   \item{x}{a numeric vector; compulsory argument}

@@ -1,6 +1,10 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.1:
+- adapted dependencies and linking to Rcpp version 0.11.0
+- cleared up package dependencies
+
 Version 1.1.0:
 - estimation of p-values now based on relative frequencies
 - Gaussian rank correlation estimator and test added

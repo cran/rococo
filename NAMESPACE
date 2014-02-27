@@ -1,7 +1,8 @@
 useDynLib(rococo)
 
 importFrom("methods")
-importFrom("methods", "show")
+
+importFrom("Rcpp", "evalCpp")
 
 export("rococo", "gauss.cor")
 

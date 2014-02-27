@@ -676,6 +676,11 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 \section{Change Log}
 
 \begin{description}
+\item[Version 1.1.1:] \hfill
+\begin{itemize}
+  \item adapted dependencies and linking to Rcpp version 0.11.0
+  \item cleared up package dependencies
+\end{itemize}
 \item[Version 1.1.0:] \hfill
   \begin{itemize}
   \item estimation of $p$-values now based on relative frequencies
@@ -692,6 +697,12 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
   \end{itemize}
 \item[Version 1.0.0:] first official release, released October 3, 2011
 \end{description}
+
+\subsection{Upgrading to Version 1.1.1}
+
+Users who upgrade to Version 1.1.1 from an older version should be aware that
+the package now requires Rcpp Version 0.11.0 (or newer). This issue can simply
+be solved by re-installing Rcpp from CRAN using \verb+install.packages("Rcpp")+.
 
 \section{How to Cite This Package}
 
