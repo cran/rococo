@@ -5,23 +5,23 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
                                 alternative=c("two.sided", "less", "greater"))
 {
      if (!is.numeric(x) || !is.numeric(y) || length(x) != length(y))
-          stop("x and y need to be numeric vectors of the same length")
+          stop("'x' and 'y' need to be numeric vectors of the same length")
 
      if (!is.numeric(r) || any(r < 0))
-          stop("r must be a (vector of) non-negative real number(s)")
+          stop("'r' must be a (vector of) non-negative real number(s)")
 
      if (missing(similarity))
          similarity <- "linear"
 
      if (!is.logical(exact) || length(exact) > 1)
-         stop("exact must be single logical")
+         stop("'exact' must be single logical")
 
      if (exact)
      {
          if (length(x) > 10)
          {
              warning("exact test intractable for more than 10 samples;",
-                     " setting exact=FALSE")
+                     " setting 'exact=FALSE'")
              exact <- FALSE
          }
          else
@@ -37,13 +37,13 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
 
      if (!is.numeric(numtests) || length(numtests) > 1 || numtests < 1 ||
          numtests != floor(numtests))
-         stop("numtests must by a single positive integer")
+         stop("'numtests' must by a single positive integer")
      else if (numtests < 100 && !exact)
          warning("for the sake of significance, it is not recommend to use",
                  "numtests < 100")
 
      if (!is.logical(storeValues) || length(storeValues) > 1)
-         stop("storeValues must be single logical")
+         stop("'storeValues' must be single logical")
 
      rcorFunc <- ""
      rcorTestFunc <- ""
@@ -52,20 +52,20 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
      {
          tnorm <- match.arg(tnorm, c("min", "prod", "lukasiewicz"))
 
-         rcorFunc <- paste("rcor_", tnorm, sep = "")
+         rcorFunc <- paste0("rcor_", tnorm)
 
          if (exact)
-             rcorTestFunc <- paste("rcor_exacttest_", tnorm, sep = "")
+             rcorTestFunc <- paste0("rcor_exacttest_", tnorm)
          else
-             rcorTestFunc <- paste("rcor_permtest_", tnorm, sep = "")
+             rcorTestFunc <- paste0("rcor_permtest_", tnorm)
 
          tnlist <- list(name=tnorm)
      }
      else if (is.function(tnorm))
      {
           if (length(formals(tnorm)) != 2)
-               stop("tnorm should be a function of two arguments, ",
-                    "e.g. 'tnorm=function(a, b) a*b' for the product t-norm")
+               stop("'tnorm' should be a function of two arguments, ",
+                    "e.g. 'tnorm=function(a, b) a * b' for the product t-norm")
 
           if (abs(tnorm(1, 0.5) - 0.5) > .Machine$double.eps ||
               abs(tnorm(0, 0.25)) > .Machine$double.eps)
@@ -76,12 +76,12 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
           else
               tnlist <- list(name="user-defined t-norm", def=tnorm)
 
-          if (require("compiler") == T)
+          if (require("compiler"))
                tnorm <- cmpfun(tnorm)
      }
      else
-         stop("tnorm should be valid string or a function of two arguments, ",
-              "e.g. 'tnorm=function(a, b) a*b' for the product t-norm")
+         stop("'tnorm' should be valid string or a function of two arguments, ",
+              "e.g. 'tnorm=function(a, b) a * b' for the product t-norm")
 
      if (length(similarity) > 1 && similarity[1] != similarity[2])
      {
@@ -91,10 +91,11 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
          if (similarity[2] != "classical" && r[2] == 0)
              r[2] <- 0.1 * IQR(y)
 
-         Rx <- .Call(paste("rcor_matrix_", similarity[1], sep = ""),
-                           vx = as.double(x), as.double(r[1]))
-         Ry <- .Call(paste("rcor_matrix_", similarity[2], sep = ""),
-                           vx = as.double(y), as.double(r[2]))
+         xCorFunc <- paste0("rcor_matrix_", similarity[1])
+         yCorFunc <- paste0("rcor_matrix_", similarity[2])
+
+         Rx <- .Call(xCorFunc, vx=as.double(x), as.double(r[1]))
+         Ry <- .Call(yCorFunc, vx=as.double(y), as.double(r[2]))
      }
      else
      {
@@ -107,8 +108,10 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
                  r[2] <- 0.1 * IQR(y)
          }
 
-         matrices <- .Call(paste("rcor_matrices_", similarity, sep = ""),
-                           vx = as.double(x), vy = as.double(y),
+         mCorFunc <- paste0("rcor_matrices_", similarity)
+
+         matrices <- .Call(mCorFunc,
+                           vx=as.double(x), vy=as.double(y),
                            as.double(r[1]), as.double(r[2]))
          Rx <- matrices$Rx
          Ry <- matrices$Ry
@@ -213,7 +216,8 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
      else if (alternative == "less")
          pval2 <- pnorm(oldgamma, mean=sampleMU, sd=sampleSD, lower.tail=TRUE)
      else
-         pval2 <- 2 * pnorm(abs(oldgamma), mean=sampleMU, sd=sampleSD, lower.tail=FALSE)
+         pval2 <- 2 * pnorm(abs(oldgamma), mean=sampleMU, sd=sampleSD,
+                            lower.tail=FALSE)
 
      new("RococoTestResults",
          count=as.integer(cnt),
@@ -237,6 +241,7 @@ rococo.test.numeric <- function(x, y, similarity=c("linear", "exp", "gauss",
 
 setMethod("rococo.test", signature(x="numeric", y="numeric"),
           rococo.test.numeric)
+
 
 rococo.test.formula <- function(x, y, na.action, ...)
 {

@@ -3,7 +3,7 @@ gauss.cor.test.numeric <- function (x, y, ...)
     DNAME <- paste(deparse(substitute(x)), "and", deparse(substitute(y)))
 
     if (!is.vector(x) || !is.vector(y) || length(x) != length(y))
-        stop("x and y must be vectors with the same length")
+        stop("'x' and 'y' must be vectors with the same length")
 
     res <- cor.test(qnorm(rank(x) / (length(x) + 1)),
                     qnorm(rank(y) / (length(y) + 1)),

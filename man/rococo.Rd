@@ -5,7 +5,8 @@
    Compute the robust gamma rank correlation coefficient
 }
 \usage{
-rococo(x, y, similarity=c("linear", "exp", "gauss", "epstol", "classical"),
+rococo(x, y,
+       similarity=c("linear", "exp", "gauss", "epstol", "classical"),
        tnorm="min", r=0)
 }
 \arguments{
@@ -60,9 +61,9 @@ U. Bodenhofer and F. Klawonn (2008).
 Robust rank correlation coefficients on the basis of fuzzy orderings:
 initial steps. \emph{Mathware Soft Comput.} \bold{15}(1):5-20.
 
-U. Bodenhofer, M. Krone, and F. Klawonn (2012).
+U. Bodenhofer, M. Krone, and F. Klawonn (2013).
 Testing noisy numerical data for monotonic association.
-\emph{Inform. Sci.}, DOI: 10.1016/j.ins.2012.11.026.}
+\emph{Inform. Sci.} \bold{245}:21-37. DOI: 10.1016/j.ins.2012.11.026.}
 \seealso{\code{\link{rococo.test}}}
 \examples{
 ## create data

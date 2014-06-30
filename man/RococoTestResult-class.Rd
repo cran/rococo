@@ -3,6 +3,7 @@
 \alias{RococoTestResults-class}
 \alias{RococoTestResults}
 \alias{rococotestresults}
+\alias{show,RococoTestResults-method}
 
 \title{Class "RococoTestResults"}
 \description{S4 class for storing results of the robust rank correlation
@@ -56,14 +57,19 @@ The following slots are defined for \code{RococoTestResults} objects:
 }
 \section{Methods}{
   \describe{
-    \item{show}{\code{signature(object = "RococoTestResults")}: see
-      \code{\link{show-methods}}}
+    \item{show}{\code{signature(object = "RococoTestResults")}: d
+      displays the most important information stored in
+  \code{object}}
   }
 }
 \author{Martin Krone & Ulrich Bodenhofer
 \email{rococo@bioinf.jku.at}}
 \references{\url{http://www.bioinf.jku.at/software/rococo/}
 
+U. Bodenhofer, M. Krone, and F. Klawonn (2013).
+Testing noisy numerical data for monotonic association.
+\emph{Inform. Sci.} \bold{245}:21-37. DOI: 10.1016/j.ins.2012.11.026.
+  
 U. Bodenhofer and F. Klawonn (2008).
 Robust rank correlation coefficients on the basis of fuzzy orderings:
 initial steps. \emph{Mathware Soft Comput.} \bold{15}(1):5-20.}
@@ -82,8 +88,9 @@ show(ret)
 ret <- rococo.test(x, y, similarity="linear", alternative="greater")
 show(ret)
 
-ret <- rococo.test(x, y, similarity=c("classical", "gauss"), r=c(0, 0.1),
-                   alternative="greater", numtests=10000)
+ret <- rococo.test(x, y, similarity=c("classical", "gauss"),
+                   r=c(0, 0.1), alternative="greater",
+                   numtests=10000)
 show(ret)
 }
 \keyword{htest}

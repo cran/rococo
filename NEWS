@@ -1,6 +1,14 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.2:
+- updated citation
+- adapted dependency and linking to Rcpp version 0.11.1
+  (to avoid issues on Mac OS)
+- minor correction of package namespace
+- improvements of consistency of error and warning messages
+- adaptations of help pages and package vignette
+
 Version 1.1.1:
 - adapted dependencies and linking to Rcpp version 0.11.0
 - cleared up package dependencies

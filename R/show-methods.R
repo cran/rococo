@@ -7,7 +7,7 @@ setMethod("show", signature(object="RococoTestResults"),
         if (length(object@similarity) == 1 ||
             object@similarity[1] == object@similarity[2])
         {
-            cat(paste("similarity:", object@similarity[1]), "\n")
+            cat("similarity:", object@similarity[1], "\n")
 
             if (object@similarity[1] != "classical")
                 cat("rx =", object@r.values[1], "/ ry =", object@r.values[2],

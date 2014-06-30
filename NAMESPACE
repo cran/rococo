@@ -1,6 +1,6 @@
 useDynLib(rococo)
 
-importFrom("methods")
+import("methods")
 
 importFrom("Rcpp", "evalCpp")
 

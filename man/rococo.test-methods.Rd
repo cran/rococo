@@ -10,9 +10,10 @@
 }
 \usage{
 \S4method{rococo.test}{numeric,numeric}(x, y,
-  similarity=c("linear", "exp", "gauss", "epstol", "classical"),
-  tnorm="min", r=0, numtests=1000, storeValues=FALSE, exact=FALSE,
-  alternative=c("two.sided", "less", "greater"))
+            similarity=c("linear", "exp", "gauss",
+                         "epstol", "classical"),
+            tnorm="min", r=0, numtests=1000, storeValues=FALSE,
+            exact=FALSE, alternative=c("two.sided", "less", "greater"))
 \S4method{rococo.test}{formula,data.frame}(x, y, na.action, ...)
 }
 \arguments{
@@ -82,9 +83,9 @@
 \email{rococo@bioinf.jku.at}}
 \references{\url{http://www.bioinf.jku.at/software/rococo/}
 
-U. Bodenhofer, M. Krone, and F. Klawonn (2012).
+U. Bodenhofer, M. Krone, and F. Klawonn (2013).
 Testing noisy numerical data for monotonic association.
-\emph{Inform. Sci.}, DOI: 10.1016/j.ins.2012.11.026.
+\emph{Inform. Sci.} \bold{245}:21-37. DOI: 10.1016/j.ins.2012.11.026.
 
 U. Bodenhofer and F. Klawonn (2008).
 Robust rank correlation coefficients on the basis of fuzzy orderings:

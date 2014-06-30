@@ -158,50 +158,41 @@ package, therefore, is to enter the following command into your \R\ session:
 <<InstallRoCoCo,eval=FALSE>>=
 install.packages("rococo")
 @
+If you use R on Windows or Mac OS, you can also conveniently use the package
+installation menu of your R GUI.
 
-\subsection{Manual installation}
+\subsection{Manual installation from source}
 
-If, for what reason ever, you prefer to install the package manually, download
-the package file suitable for your computer system and copy it to your harddisk.
-Open the package's page at CRAN%
+Under special circumstances, e.g. if you want to compile
+the C++ code included in the package with some custom options,
+you may prefer to install the package manually from source.
+To this end, open the package's page at CRAN%
 \footnote{\url{http://cran.r-project.org/web/packages/rococo/index.html}} and
-then proceed as follows.
-
-\subsubsection*{Manual installation under Windows}
-
-\begin{enumerate}
-\item Download \texttt{rococo\_\RoCoCoVer.zip}
-and save it to your harddisk
-\item Open the \R\ GUI and select the menu entry
-\begin{quote}
-\ttfamily Packages | Install package(s) from local zip files...
-\end{quote}
-(if you use \R\ in a different language, search for the analogous
-menu entry).
-In the file dialog that opens, go to the folder where you placed
-{\ttfamily rococo\_\RoCoCoVer.zip} and select this file. The
-package should be installed now.
-\end{enumerate}
-
-\subsubsection*{Manual installation under Linux/UNIX/MacOS}
+then proceed as follows:
 \begin{enumerate}
 \item Download \texttt{rococo\_\RoCoCoVer.tar.gz}
 and save it to your harddisk.
-\item Open a shell window and change to the directory where you put
-  {\ttfamily rococo\_\RoCoCoVer.tar.gz}. Enter
+\item Open a shell/terminal/command prompt window and change to the directory
+  where you put {\ttfamily rococo\_\RoCoCoVer.tar.gz}. Enter
 \begin{quote}
 \ttfamily R CMD INSTALL rococo\_\RoCoCoVer.tar.gz
 \end{quote}
 to install the package.
 \end{enumerate}
+Note that this might require additional software on some platforms. Windows
+requires
+Rtools\footnote{\url{http://cran.r-project.org/bin/windows/Rtools/}} to be
+installed and to be available in the default search path (environment variable
+\verb+PATH+). Mac OS X requires Xcode developer tools%
+\footnote{\url{https://developer.apple.com/technologies/tools/}} (make sure that
+you have the command line tools installed with Xcode).
 
 \subsection{Compatibility issues}
 
-Both the Windows and the Linux/UNIX/MacOS version available from
-CRAN have been built using the latest version, \R\
-\Sexpr{R.version$major}.\Sexpr{R.version$minor}.
-However, the package should work
-without severe problems on \R\ versions $\geq$2.12.0.
+All versions downloadable from CRAN have been built using the latest version,
+\R\ \Sexpr{R.version$major}.\Sexpr{R.version$minor}.
+However, the package should work without severe problems on \R\ versions
+$\geq$3.0.0.
 
 \section{Getting Started}
 
@@ -388,13 +379,8 @@ from a function $f$ that has a large flat area:
 \begin{center}
 <<FlatNoisyData,fig=TRUE,echo=TRUE,width=5,height=5>>=
 x2 <- rnorm(15)
-f2 <- function(x)
-{
-    if (x > 0.8) x - 0.8
-    else if (x < -0.8) x + 0.8
-    else 0
-}
-y2 <- sapply(x2, f2) + rnorm(length(x2), sd=0.1)
+f2 <- function(x) ifelse(x > 0.8, x - 0.8, ifelse(x < -0.8, x + 0.8, 0))
+y2 <- f2(x2) + rnorm(length(x2), sd=0.1)
 plot(x2, y2)
 @
 \end{center}
@@ -676,6 +662,15 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 \section{Change Log}
 
 \begin{description}
+\item[Version 1.1.2:] \hfill
+\begin{itemize}
+  \item updated citation
+  \item adapted dependency and linking to Rcpp version 0.11.1
+    (to avoid issues on Mac OS)
+  \item minor correction of package namespace
+  \item improvements of consistency of error and warning messages
+  \item adaptations of help pages and package vignette
+\end{itemize}
 \item[Version 1.1.1:] \hfill
 \begin{itemize}
   \item adapted dependencies and linking to Rcpp version 0.11.0
@@ -698,9 +693,10 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 \item[Version 1.0.0:] first official release, released October 3, 2011
 \end{description}
 
-\subsection{Upgrading to Version 1.1.1}
+\subsection{Upgrading to Version 1.1.1 or newer}
 
-Users who upgrade to Version 1.1.1 from an older version should be aware that
+Users who upgrade to Version 1.1.1 (or newer)
+from an older version should be aware that
 the package now requires Rcpp Version 0.11.0 (or newer). This issue can simply
 be solved by re-installing Rcpp from CRAN using \verb+install.packages("Rcpp")+.
 
@@ -738,104 +734,103 @@ Solutions''}. Therefore, the support of this project is gratefully acknowledged.
 \begin{thebibliography}{10}
 
 \bibitem{Abdi07b}
-H.\ Abdi.
+H.~Abdi.
 \newblock Coefficients of correlation, alienation and determination.
-\newblock In N.\ J. Salkind, editor, {\em Encyclopedia of Measurement and
+\newblock In N.~J. Salkind, editor, {\em Encyclopedia of Measurement and
   Statistics}. Sage, Thousand Oaks, CA, 2007.
 
 \bibitem{Abdi07}
-H.\ Abdi.
+H.~Abdi.
 \newblock The {Kendall} rank correlation coefficient.
-\newblock In N.\ J. Salkind, editor, {\em Encyclopedia of Measurement and
+\newblock In N.~J. Salkind, editor, {\em Encyclopedia of Measurement and
   Statistics}. Sage, Thousand Oaks, CA, 2007.
 
 \bibitem{Bodenhofer00}
-U.\ Bodenhofer.
+U.~Bodenhofer.
 \newblock A similarity-based generalization of fuzzy orderings preserving the
   classical axioms.
 \newblock {\em Internat. J. Uncertain. Fuzziness Knowledge-Based Systems},
   8(5):593--610, 2000.
 
 \bibitem{BodenhoferDemirci08}
-U.\ Bodenhofer and M.\ Demirci.
+U.~Bodenhofer and M.~Demirci.
 \newblock Strict fuzzy orderings with a given context of similarity.
 \newblock {\em Internat. J. Uncertain. Fuzziness Knowledge-Based Systems},
   16(2):147--178, 2008.
 
 \bibitem{BodenhoferKlawonn08}
-U.\ Bodenhofer and F.\ Klawonn.
+U.~Bodenhofer and F.~Klawonn.
 \newblock Robust rank correlation coefficients on the basis of fuzzy orderings:
   initial steps.
 \newblock {\em Mathware Soft Comput.}, 15(1):5--20, 2008.
 
 \bibitem{BodenhoferKroneKlawonn13}
-U.\ Bodenhofer, M.\ Krone, and F.\ Klawonn.
+U.~Bodenhofer, M.~Krone, and F.~Klawonn.
 \newblock Testing noisy numerical data for monotonic association.
-\newblock {\em Inform. Sci.}, 2013.
-\newblock (accepted).
+\newblock {\em Inform. Sci.}, 245:21--37, 2013.
 
 \bibitem{BoudtCornelissenCroux12}
-K.\ Boudt, J.\ Cornelissen, and C.\ Croux.
+K.~Boudt, J.~Cornelissen, and C.~Croux.
 \newblock The {G}aussian rank correlation estimator: robustness properties.
 \newblock {\em Stat. Comput.}, 22(2):471--483, 2012.
 
 \bibitem{EddelbuettelFrancois11}
-D.\ Eddelbuettel and R.\ Fran\c{c}ois.
+D.~Eddelbuettel and R.~Fran\c{c}ois.
 \newblock Rcpp: seamless {R} and {C++} integration.
 \newblock {\em J. Stat. Softw.}, 40(8):1--18, 2011.
 
 \bibitem{GoodmanKruskal54}
-L.\ A. Goodman and W.\ H. Kruskal.
+L.~A. Goodman and W.~H. Kruskal.
 \newblock Measures of association for cross classifications.
 \newblock {\em J. Amer. Statist. Assoc.}, 49(268):732--764, 1954.
 
 \bibitem{HoehleBlanchard85}
-U.\ H\"ohle and N.\ Blanchard.
+U.~H\"ohle and N.~Blanchard.
 \newblock Partial ordering in {$L$}-un\-der\-de\-ter\-mi\-nate sets.
 \newblock {\em Inform. Sci.}, 35:133--144, 1985.
 
 \bibitem{Kendall38}
-M.\ G. Kendall.
+M.~G. Kendall.
 \newblock A new measure of rank correlation.
 \newblock {\em Biometrika}, 30:81--93, 1938.
 
 \bibitem{Kendall62}
-M.\ G. Kendall.
+M.~G. Kendall.
 \newblock {\em Rank Correlation Methods}.
 \newblock Charles Griffin \&\ Co., London, third edition, 1962.
 
 \bibitem{KlementMesiarPap00}
-E.\ P. Klement, R.\ Mesiar, and E.\ Pap.
-\newblock {\em Triangular Norms}, volume\ 8 of {\em Trends in Logic}.
+E.~P. Klement, R.~Mesiar, and E.~Pap.
+\newblock {\em Triangular Norms}, volume~8 of {\em Trends in Logic}.
 \newblock Kluwer Academic Publishers, Dordrecht, 2000.
 
 \bibitem{Kruskal58}
-W.\ H. Kruskal.
+W.~H. Kruskal.
 \newblock Ordinal measures of association.
 \newblock {\em J. Amer. Statist. Assoc.}, 53(284):814--861, 1958.
 
 \bibitem{Pearson20}
-K.\ Pearson.
+K.~Pearson.
 \newblock Notes on the history of correlation.
 \newblock {\em Biometrika}, 13:25--45, 1920.
 
 \bibitem{Sedgewick77}
-R.\ Sedgewick.
+R.~Sedgewick.
 \newblock Permutation generation methods.
 \newblock {\em ACM Comput. Surv.}, 9(2):137--164, 1977.
 
 \bibitem{Spearman04}
-C.\ Spearman.
+C.~Spearman.
 \newblock The proof and measurement of association between two things.
 \newblock {\em Am. J. Psychol.}, 15(1):72--101, 1904.
 
 \bibitem{Spearman07}
-C.\ Spearman.
+C.~Spearman.
 \newblock Demonstration of formulae for true measurement of correlation.
 \newblock {\em Am. J. Psychol.}, 18(2):161--169, 1907.
 
 \bibitem{Yager80b}
-R.\ R. Yager.
+R.~R. Yager.
 \newblock On a general class of fuzzy connectives.
 \newblock {\em Fuzzy Sets and Systems}, 4:235--242, 1980.
 

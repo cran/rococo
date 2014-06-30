@@ -58,7 +58,8 @@ gauss.cor.test(x, y, alternative="greater")
 ## the formula variant
 require(datasets)
 data(iris)
-gauss.cor.test(~ Petal.Width + Petal.Length, iris, alternative="two.sided")
+gauss.cor.test(~ Petal.Width + Petal.Length, iris,
+               alternative="two.sided")
 }
 \keyword{htest}
 \keyword{methods}

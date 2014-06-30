@@ -72,13 +72,8 @@ rococo.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 ### code chunk number 10: FlatNoisyData
 ###################################################
 x2 <- rnorm(15)
-f2 <- function(x)
-{
-    if (x > 0.8) x - 0.8
-    else if (x < -0.8) x + 0.8
-    else 0
-}
-y2 <- sapply(x2, f2) + rnorm(length(x2), sd=0.1)
+f2 <- function(x) ifelse(x > 0.8, x - 0.8, ifelse(x < -0.8, x + 0.8, 0))
+y2 <- f2(x2) + rnorm(length(x2), sd=0.1)
 plot(x2, y2)
 
 
