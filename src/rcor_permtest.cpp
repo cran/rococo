@@ -4,17 +4,17 @@
 
 using namespace Rcpp;
 
-/* produce shuffle of 1:n */
+/* produce Knuth shuffle of 1:n */
 
 void shuffle_in_place(IntegerVector idx)
 {
     int i, j, s;
     int len = idx.size();
 	
-    for (i = len - 1; i >= 1; i--)
+    for (i = 0; i < len; i++)
     {
-	j = rand() % (i + 1);
-	if (j < 0) j += (i + 1);
+	j = (int)floor(R::runif(0, 1) * (i + 1));
+	if (j > i) j = 0;
 
 	s = idx[i];
 	idx[i] = idx[j];

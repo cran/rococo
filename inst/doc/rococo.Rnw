@@ -1,6 +1,5 @@
 \documentclass[article]{bioinf}
 
-\usepackage[noae]{Sweave}
 \usepackage{amsmath,amssymb}
 \usepackage{hyperref}
 
@@ -43,18 +42,17 @@ Salzdahlumer Str.\ 46/48, 38302 Wolfenb\"uttel, Germany\\[2mm]
 
 \renewcommand{\vec}[1]{\mathbf{#1}}
 
-\setkeys{Gin}{width=0.55\textwidth}
+%\VignetteIndexEntry{RoCoCo - An R Package Implementing a Robust Rank Correlation Coefficient and a Corresponding Test}
+%\VignetteDepends{Rcpp, methods, stats, graphics, utils, datasets}
+%\VignetteEngine{knitr::knitr}
 
-% \VignetteIndexEntry{RoCoCo - An R Package Implementing a Robust Rank Correlation Coefficient and a Corresponding Test}
-% \VignetteDepends{Rcpp, methods, stats, graphics, utils, datasets}
-
-\SweaveOpts{eps=FALSE}
 
 \begin{document}
-<<Init,echo=FALSE>>=
-options(width=75)
+<<Init,echo=FALSE,message=FALSE,results='hide'>>=
+options(width=72)
+knitr::opts_knit$set(width=72)
 set.seed(0)
-library(rococo)
+library(rococo, quietly=TRUE)
 rococoVersion <- packageDescription("rococo")$Version
 rococoDateRaw <- packageDescription("rococo")$Date
 rococoDateYear <- as.numeric(substr(rococoDateRaw, 1, 4))
@@ -220,7 +218,7 @@ help(rococo)
 
 For demonstration purposes, let us first create an artificial toy data set:
 \begin{center}
-<<ToyData,fig=TRUE,echo=TRUE,width=5,height=5>>=
+<<ToyData,fig.width=5,fig.height=5.5,out.width='0.5\\textwidth'>>=
 x1 <- rnorm(15)
 y1 <- 2 * x1 + rnorm(length(x1), sd=0.25)
 plot(x1, y1)
@@ -246,7 +244,7 @@ The function \texttt{rococo.test()} is a generic method that can be called on
 two numeric vectors (as above) or, alternatively, using a formula to
 conveniently extract two columns from a data frame:
 \begin{center}
-<<RoCoCoTestFormula,fig=TRUE,echo=TRUE,width=5,height=5>>=
+<<RoCoCoTestFormula,fig.width=5,fig.height=5.5,out.width='0.5\\textwidth'>>=
 data(iris)
 plot(~ Sepal.Length + Petal.Length, iris)
 rococo.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
@@ -310,7 +308,7 @@ provides an overview.
 \begin{table}
 \caption{Overview of strict fuzzy orderings implemented in the
 \RoCoCo\ package:}\label{tab:sim}
-\begin{center}\small
+\begin{center}\footnotesize
 \begin{tabular}{|c|c|c|}
 \hline
 \bf Setting & \bf Similarity & \bf Strict fuzzy ordering \\
@@ -377,7 +375,7 @@ strict fuzzy orderings for $x$ and $y$ observations, the \texttt{similarity}
 argument can be used. For demonstrating this, we create a noisy data set
 from a function $f$ that has a large flat area:
 \begin{center}
-<<FlatNoisyData,fig=TRUE,echo=TRUE,width=5,height=5>>=
+<<FlatNoisyData,fig.width=5,fig.height=5.5,out.width='0.5\\textwidth'>>=
 x2 <- rnorm(15)
 f2 <- function(x) ifelse(x > 0.8, x - 0.8, ifelse(x < -0.8, x + 0.8, 0))
 y2 <- f2(x2) + rnorm(length(x2), sd=0.1)
@@ -392,8 +390,10 @@ This default setting makes sense in particular if no information about the
 data, their distribution, or not even the noise distribution is known.
 Now let us try some different settings:
 <<FlatNoisyOther>>=
-rococo.test(x2, y2, similarity="gauss", alternative="greater")
-rococo.test(x2, y2, similarity=c("classical", "gauss"), alternative="greater")
+rococo.test(x2, y2, similarity="gauss",
+            alternative="greater")
+rococo.test(x2, y2, similarity=c("classical", "gauss"),
+            alternative="greater")
 @
 Particularly note the latter of the two examples: different settings for
 $x$ and $y$ observations can be done by supplying a vector to the
@@ -431,7 +431,8 @@ adjustment} of $r$ to 10\% of the interquartile range (the
 difference between the 75\% and the 25\% quantile) of the observation
 under consideration:
 <<CheckIQR>>=
-rococo.test(x2, y2, similarity=c("linear", "gauss"), r=0, alternative="greater")
+rococo.test(x2, y2, similarity=c("linear", "gauss"), r=0,
+            alternative="greater")
 IQR(x2) * 0.1
 IQR(y2) * 0.1
 @
@@ -451,7 +452,7 @@ offers three built-in t-norms that can be selected by specifying the
 \texttt{tnorm} argument when calling the functions \texttt{rococo()} and
 \texttt{rococo.test()}. Table \ref{tab:tnorm} provides an overview. Here is an
 example that uses the product t-norm for aggregation:
-<<CheckIQR>>=
+<<CheckIQR2>>=
 rococo.test(x2, y2, similarity=c("linear", "gauss"), tnorm="prod",
             alternative="greater")
 @
@@ -628,7 +629,7 @@ distribution. The following picture suggests that a normal approximation may
 also be suitable for the robust rank correlation test (data from the above
 example with 100,000 shuffles):
 \begin{center}
-<<LargeNoShufflesPic,fig=TRUE,echo=TRUE,width=5,height=5>>=
+<<LargeNoShufflesPic,fig.width=8,fig.height=5.5,out.width='0.7\\textwidth'>>=
 hist(res@perm.gamma, breaks=100, probability=TRUE, xlab="gamma",
      main="Distribution of gamma for random shuffles")
 plot(function(x) dnorm(x, mean=res@H0gamma.mu, sd=res@H0gamma.sd),
@@ -662,6 +663,14 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 \section{Change Log}
 
 \begin{description}
+\item[Version 1.1.3:] \hfill
+\begin{itemize}
+  \item vignette engine changed from Sweave to knitr
+  \item fix of on-demand loading of \verb+compiler+ package
+  \item random number generation in compiled code switched to R API
+  \item moved \verb+NEWS+ to \verb+inst/NEWS+
+  \item namespace fixes
+\end{itemize}
 \item[Version 1.1.2:] \hfill
 \begin{itemize}
   \item updated citation
@@ -705,9 +714,9 @@ be solved by re-installing Rcpp from CRAN using \verb+install.packages("Rcpp")+.
 If you use this package for research that is published later, you are kindly
 asked to cite it as follows:
 \begin{quotation}
-\noindent U. Bodenhofer, M. Krone, and F. Klawonn (2012).
+\noindent U. Bodenhofer, M. Krone, and F. Klawonn (2013).
 Testing noisy numerical data for monotonic association.
-{\em Inform. Sci.}, DOI: 10.1016/j.ins.2012.11.026.\\[5mm]
+{\em Inform. Sci.} {\bf 245}:21--37. DOI: 10.1016/j.ins.2012.11.026.\\[5mm]
 \noindent U.\ Bodenhofer  and F.\ Klawonn (2008).
 Robust rank correlation coefficients on the basis of
 fuzzy orderings: initial steps.

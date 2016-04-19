@@ -1,6 +1,13 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.3:
+- vignette engine changed from Sweave to knitr
+- fix of on-demand loading of 'compiler' package
+- random number generation in compiled code switched to R API
+- moved NEWS to inst/NEWS
+- namespace fixes
+
 Version 1.1.2:
 - updated citation
 - adapted dependency and linking to Rcpp version 0.11.1

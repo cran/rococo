@@ -3,6 +3,8 @@ useDynLib(rococo)
 import("methods")
 
 importFrom("Rcpp", "evalCpp")
+importFrom("stats",
+           "IQR", "cor", "cor.test", "pnorm", "qnorm", "sd")
 
 export("rococo", "gauss.cor")
 

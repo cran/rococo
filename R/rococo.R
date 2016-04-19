@@ -34,8 +34,8 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
               abs(tnorm(0, 0.25)) > .Machine$double.eps)
                stop("supplied function does not appear to be a valid t-norm")
 
-          if (require("compiler"))
-               tnorm <- cmpfun(tnorm)
+          if (requireNamespace("compiler", quietly=TRUE))
+               tnorm <- compiler::cmpfun(tnorm)
      }
      else
          stop("'tnorm' should be valid string or a function of two arguments, ",
