@@ -13,7 +13,8 @@
             similarity=c("linear", "exp", "gauss",
                          "epstol", "classical"),
             tnorm="min", r=0, numtests=1000, storeValues=FALSE,
-            exact=FALSE, alternative=c("two.sided", "less", "greater"))
+            exact=FALSE, alternative=c("two.sided", "less", "greater"),
+            noVarReturnZero=TRUE)
 \S4method{rococo.test}{formula,data.frame}(x, y, na.action, ...)
 }
 \arguments{
@@ -40,6 +41,10 @@
     \code{"less"}. Abbreviations are allowed as long as they are
     unique. \code{"greater"} corresponds to positive
     association, \code{"less"} to negative association.}
+  \item{noVarReturnZero}{if \code{TRUE} (default), a correlation of 0
+    and a p-value of 1 are returned if there is no variation in at least
+    one of the two observables. Otherwise, a correlation of \code{NA}
+    and a p-value of 1 are returned and a warning is issued.}
   \item{na.action}{a function which indicates what should happen when the data
     contain \code{NA}'s.  Defaults to \code{getOption("na.action")}.}
   \item{...}{all parameters specified are forwarded internally to the

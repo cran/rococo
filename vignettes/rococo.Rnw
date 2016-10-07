@@ -663,6 +663,12 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 \section{Change Log}
 
 \begin{description}
+\item[Version 1.1.4:] \hfill
+\begin{itemize}
+  \item added special options for dealing with cases in which observables
+  do not show any variation
+  \item fixed automatic computation of tolerances for cases where IQR is 0
+\end{itemize}
 \item[Version 1.1.3:] \hfill
 \begin{itemize}
   \item vignette engine changed from Sweave to knitr

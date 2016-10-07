@@ -7,7 +7,7 @@
 \usage{
 rococo(x, y,
        similarity=c("linear", "exp", "gauss", "epstol", "classical"),
-       tnorm="min", r=0)
+       tnorm="min", r=0, noVarReturnZero=TRUE)
 }
 \arguments{
   \item{x}{a numeric vector; compulsory argument}
@@ -39,6 +39,9 @@ rococo(x, y,
     meaning: if an entry in \code{r} is \code{0}, then the tolerance is
     automatically adapted to 10 percent of the interquartile range of
     the data.}
+  \item{noVarReturnZero}{if \code{TRUE} (default), a correlation of 0
+    is returned if there is no variation in at least one of the two
+    observables. Otherwise, \code{NA} is returned and a warning is issued.}
 }
 \details{\code{rococo} computes the robust gamma rank correlation
   coefficient of \code{x} and \code{y} according to the specified

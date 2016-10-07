@@ -1,5 +1,6 @@
 rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
-                                      "classical"), tnorm="min", r=0)
+                                      "classical"),
+                   tnorm="min", r=0, noVarReturnZero=TRUE)
 {
      if (!is.numeric(x) || !is.numeric(y) || length(x) != length(y))
           stop("'x' and 'y' need to be numeric vectors of the same length")
@@ -44,10 +45,30 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
      if (length(similarity) > 1 && similarity[1] != similarity[2])
      {
          if (similarity[1] != "classical" && r[1] == 0)
+         {
              r[1] <- 0.1 * IQR(x)
 
+             if (r[1] == 0)
+             {
+                 warning("IQR(x) = 0 => ",
+                         "could not determine tolerance; ",
+                         "reverting to classical crisp similarity")
+                 similarity[1] <- "classical"
+             }
+         }
+
          if (similarity[2] != "classical" && r[2] == 0)
+         {
              r[2] <- 0.1 * IQR(y)
+
+             if (r[2] == 0)
+             {
+                 warning("IQR(y) = 0 => ",
+                         "could not determine tolerance; ",
+                         "reverting to classical crisp similarity")
+                 similarity[2] <- "classical"
+             }
+         }
 
          xCorFunc <- paste0("rcor_matrix_", similarity[1])
          yCorFunc <- paste0("rcor_matrix_", similarity[2])
@@ -60,19 +81,50 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
          if (similarity[1] != "classical")
          {
              if (r[1] == 0)
+             {
                  r[1] <- 0.1 * IQR(x)
 
+                 if (r[1] == 0)
+                 {
+                     warning("IQR(x) = 0 => ",
+                             "could not determine tolerance; ",
+                             "reverting to classical crisp similarity")
+                     similarity[1] <- "classical"
+                 }
+             }
+
              if (r[2] == 0)
+             {
                  r[2] <- 0.1 * IQR(y)
+
+                 if (r[2] == 0)
+                 {
+                     warning("IQR(y) = 0 => ",
+                             "could not determine tolerance; ",
+                             "reverting to classical crisp similarity")
+                     similarity[2] <- "classical"
+                 }
+             }
          }
 
-         mCorFunc <- paste0("rcor_matrices_", similarity)
+         if (length(similarity) > 1 && similarity[1] != similarity[2])
+         {
+             xCorFunc <- paste0("rcor_matrix_", similarity[1])
+             yCorFunc <- paste0("rcor_matrix_", similarity[2])
 
-         matrices <- .Call(mCorFunc,
-                           vx=as.double(x), vy=as.double(y),
-                           as.double(r[1]), as.double(r[2]))
-         Rx <- matrices$Rx
-         Ry <- matrices$Ry
+             Rx <- .Call(xCorFunc, vx=as.double(x), as.double(r[1]))
+             Ry <- .Call(yCorFunc, vx=as.double(y), as.double(r[2]))
+         }
+         else
+         {
+             mCorFunc <- paste0("rcor_matrices_", similarity)
+
+             matrices <- .Call(mCorFunc,
+                               vx=as.double(x), vy=as.double(y),
+                               as.double(r[1]), as.double(r[2]))
+             Rx <- matrices$Rx
+             Ry <- matrices$Ry
+         }
      }
 
      if (!identical(rcorFunc, ""))
@@ -87,7 +139,15 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
           d <- sum(mapply(tnorm, Rx, t(Ry)))
      }
 
-     gamma <- ifelse(c + d == 0, 0, (c - d) / (c + d))
+     if (!is.na(c) && !is.na(d) && c + d > 0)
+         gamma <- (c - d) / (c + d)
+     else if (identical(noVarReturnZero, TRUE))
+         gamma <- 0
+     else
+     {
+         gamma <- NA
+         warning("no variation in at least one of the two observables")
+     }
 
      gamma
 }
