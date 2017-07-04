@@ -92,11 +92,10 @@ RcppExport SEXP permNextWrapper(SEXP perm, SEXP sign)
 }
 
 
-SEXP rcor_exacttest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
-		    double (*tnorm_fp)(double, double), SEXP alt,
-		    SEXP storeValues)
+RcppExport SEXP rcor_exacttest(SEXP matx, SEXP maty, SEXP tnorm, SEXP tests,
+			       SEXP ogamma, SEXP alt, SEXP storeValues)
 {
-    int i, cnt = 0, oldcnt = 0;
+    int i, cnt = 0, oldcnt = 0, tnorm_sel = as<int>(tnorm);
     double c, d;
     NumericVector gamma(1);
 
@@ -107,9 +106,19 @@ SEXP rcor_exacttest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
     int alternative = IntegerVector(alt)[0];
     // 0 == two.sided, 1 == less, 2 == greater
     double old_gamma = NumericVector(ogamma)[0];
+
+    double (*tnorm_fp)(double, double);
 	
     IntegerVector perm(mat_x.nrow());
     IntegerVector sign(mat_x.nrow());
+
+    switch(tnorm_sel)
+    {
+        case  1 : tnorm_fp = min_tnorm; break;
+        case  2 : tnorm_fp = prod_tnorm; break;
+        case  3 : tnorm_fp = lukasiewicz_tnorm; break;
+        default : tnorm_fp = min_tnorm;
+    }
 	
     for (i = 0; i < mat_x.nrow(); i++)
     {
@@ -168,28 +177,4 @@ SEXP rcor_exacttest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
 	return List::create(_["cnt"] = cnt, _["ogamma"] = old_gamma,
 			    _["H0mu"] = mean,
 			    _["H0sd"] = sqrt(M2 / (num_tests - 1)));
-}
-
-RcppExport SEXP rcor_exacttest_min(SEXP matx, SEXP maty, SEXP tests,
-				   SEXP ogamma, SEXP alternative,
-				   SEXP storeValues)
-{
-    return rcor_exacttest(matx, maty, tests, ogamma, min_tnorm,
-			  alternative, storeValues);
-}
-
-RcppExport SEXP rcor_exacttest_prod(SEXP matx, SEXP maty, SEXP tests,
-				    SEXP ogamma, SEXP alternative,
-				    SEXP storeValues)
-{
-    return rcor_exacttest(matx, maty, tests, ogamma, prod_tnorm,
-			  alternative, storeValues);
-}
-
-RcppExport SEXP rcor_exacttest_lukasiewicz(SEXP matx, SEXP maty, SEXP tests, 
-					   SEXP ogamma, SEXP alternative,
-					   SEXP storeValues)
-{
-    return rcor_exacttest(matx, maty, tests, ogamma, lukasiewicz_tnorm,
-			  alternative, storeValues);
 }

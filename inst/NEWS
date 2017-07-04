@@ -1,6 +1,10 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.5:
+- registered C/C++ subroutines
+- cleanup and streamlining of C++ code
+
 Version 1.1.4:
 - added special options for dealing with cases in which observables
   do not show any variation

@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include "tnorms.h"
 #include "rcor.h"
+#include "rcor_permtest.h"
 
 using namespace Rcpp;
 
@@ -22,11 +23,10 @@ void shuffle_in_place(IntegerVector idx)
     }
 }
 
-SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
-		   double (*tnorm_fp)(double, double), SEXP alt,
-		   SEXP storeValues)
+RcppExport SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tnorm, SEXP tests,
+			      SEXP ogamma, SEXP alt, SEXP storeValues)
 {
-    int i, cnt = 0;
+    int i, cnt = 0, tnorm_sel = as<int>(tnorm);
     double c, d;
     NumericVector gamma(1);
 
@@ -37,6 +37,8 @@ SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
     int alternative = IntegerVector(alt)[0];
     // 0 == two.sided, 1 == less, 2 == greater
     double old_gamma = NumericVector(ogamma)[0];
+
+    double (*tnorm_fp)(double, double);
 	
     IntegerVector perm(mat_x.nrow());
 	
@@ -50,6 +52,14 @@ SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
     int numGamma = (store[0] ? num_tests : 0);
 
     NumericVector permGamma(numGamma);
+
+    switch(tnorm_sel)
+    {
+        case  1 : tnorm_fp = min_tnorm; break;
+        case  2 : tnorm_fp = prod_tnorm; break;
+        case  3 : tnorm_fp = lukasiewicz_tnorm; break;
+        default : tnorm_fp = min_tnorm;
+    }
 
     for (i = 0; i < num_tests; i++)
     {
@@ -89,28 +99,4 @@ SEXP rcor_permtest(SEXP matx, SEXP maty, SEXP tests, SEXP ogamma,
 	return List::create(_["cnt"] = cnt, _["ogamma"] = old_gamma,
 			    _["H0mu"] = mean,
 			    _["H0sd"] = sqrt(M2 / (num_tests - 1)));
-}
-
-RcppExport SEXP rcor_permtest_min(SEXP matx, SEXP maty, SEXP tests,
-				  SEXP ogamma, SEXP alternative,
-				  SEXP storeValues)
-{
-    return rcor_permtest(matx, maty, tests, ogamma, min_tnorm,
-			 alternative, storeValues);
-}
-
-RcppExport SEXP rcor_permtest_prod(SEXP matx, SEXP maty, SEXP tests,
-				   SEXP ogamma, SEXP alternative,
-				   SEXP storeValues)
-{
-    return rcor_permtest(matx, maty, tests, ogamma, prod_tnorm,
-			 alternative, storeValues);
-}
-
-RcppExport SEXP rcor_permtest_lukasiewicz(SEXP matx, SEXP maty, SEXP tests,
-					  SEXP ogamma, SEXP alternative,
-					  SEXP storeValues)
-{
-    return rcor_permtest(matx, maty, tests, ogamma, lukasiewicz_tnorm,
-			 alternative, storeValues);
 }

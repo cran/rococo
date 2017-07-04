@@ -16,14 +16,13 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
      if (length(r) == 1)
          r[2] <- r[1]
 
-     rcorFunc <- ""
+     tnormSel <- -1
 
      if (is.character(tnorm))
      {
          tnorm <- match.arg(tnorm, c("min", "prod", "lukasiewicz"))
 
-         rcorFunc <- paste0("rcor_", tnorm)
-         rcorTestFunc <- paste0("rcor_permtest_", tnorm)
+         tnormSel <- switch(tnorm, min=1, prod=2, lukasiewicz=3)
      }
      else if (is.function(tnorm))
      {
@@ -70,11 +69,28 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
              }
          }
 
-         xCorFunc <- paste0("rcor_matrix_", similarity[1])
-         yCorFunc <- paste0("rcor_matrix_", similarity[2])
-
-         Rx <- .Call(xCorFunc, vx=as.double(x), as.double(r[1]))
-         Ry <- .Call(yCorFunc, vx=as.double(y), as.double(r[2]))
+         Rx <- switch(similarity[1],
+                      linear=.Call("rcor_matrix_linear",
+                                   vx=as.double(x), as.double(r[1])),
+                      exp=.Call("rcor_matrix_exp",
+                                vx=as.double(x), as.double(r[1])),
+                      gauss=.Call("rcor_matrix_gauss",
+                                  vx=as.double(x), as.double(r[1])),
+                      epstol=.Call("rcor_matrix_epstol",
+                                   vx=as.double(x), as.double(r[1])),
+                      classical=.Call("rcor_matrix_classical",
+                                   vx=as.double(x), as.double(r[1])))
+         Ry <- switch(similarity[2],
+                      linear=.Call("rcor_matrix_linear",
+                                   vx=as.double(y), as.double(r[2])),
+                      exp=.Call("rcor_matrix_exp",
+                                vx=as.double(y), as.double(r[2])),
+                      gauss=.Call("rcor_matrix_gauss",
+                                  vx=as.double(y), as.double(r[2])),
+                      epstol=.Call("rcor_matrix_epstol",
+                                   vx=as.double(y), as.double(r[2])),
+                      classical=.Call("rcor_matrix_classical",
+                                   vx=as.double(y), as.double(r[2])))
      }
      else
      {
@@ -109,27 +125,66 @@ rococo <- function(x, y, similarity=c("linear", "exp", "gauss", "epstol",
 
          if (length(similarity) > 1 && similarity[1] != similarity[2])
          {
-             xCorFunc <- paste0("rcor_matrix_", similarity[1])
-             yCorFunc <- paste0("rcor_matrix_", similarity[2])
-
-             Rx <- .Call(xCorFunc, vx=as.double(x), as.double(r[1]))
-             Ry <- .Call(yCorFunc, vx=as.double(y), as.double(r[2]))
+             Rx <- switch(similarity[1],
+                          linear=.Call("rcor_matrix_linear",
+                                       vx=as.double(x), as.double(r[1])),
+                          exp=.Call("rcor_matrix_exp",
+                                    vx=as.double(x), as.double(r[1])),
+                          gauss=.Call("rcor_matrix_gauss",
+                                      vx=as.double(x), as.double(r[1])),
+                          epstol=.Call("rcor_matrix_epstol",
+                                       vx=as.double(x), as.double(r[1])),
+                          classical=.Call("rcor_matrix_classical",
+                                          vx=as.double(x), as.double(r[1])))
+             Ry <- switch(similarity[2],
+                          linear=.Call("rcor_matrix_linear",
+                                       vx=as.double(y), as.double(r[2])),
+                          exp=.Call("rcor_matrix_exp",
+                                    vx=as.double(y), as.double(r[2])),
+                          gauss=.Call("rcor_matrix_gauss",
+                                      vx=as.double(y), as.double(r[2])),
+                          epstol=.Call("rcor_matrix_epstol",
+                                       vx=as.double(y), as.double(r[2])),
+                          classical=.Call("rcor_matrix_classical",
+                                          vx=as.double(y), as.double(r[2])))
          }
          else
          {
-             mCorFunc <- paste0("rcor_matrices_", similarity)
+             matrices <- switch(similarity[1],
+                                linear=.Call("rcor_matrices_linear",
+                                             vx=as.double(x),
+                                             vy=as.double(y),
+                                             as.double(r[1]),
+                                             as.double(r[2])),
+                                exp=.Call("rcor_matrices_exp",
+                                          vx=as.double(x),
+                                          vy=as.double(y),
+                                          as.double(r[1]),
+                                          as.double(r[2])),
+                                gauss=.Call("rcor_matrices_gauss",
+                                            vx=as.double(x),
+                                            vy=as.double(y),
+                                            as.double(r[1]),
+                                            as.double(r[2])),
+                                epstol=.Call("rcor_matrices_epstol",
+                                             vx=as.double(x),
+                                             vy=as.double(y),
+                                             as.double(r[1]),
+                                             as.double(r[2])),
+                                classical=.Call("rcor_matrices_classical",
+                                                vx=as.double(x),
+                                                vy=as.double(y),
+                                                as.double(r[1]),
+                                                as.double(r[2])))
 
-             matrices <- .Call(mCorFunc,
-                               vx=as.double(x), vy=as.double(y),
-                               as.double(r[1]), as.double(r[2]))
              Rx <- matrices$Rx
              Ry <- matrices$Ry
          }
      }
 
-     if (!identical(rcorFunc, ""))
+     if (tnormSel > 0)
      {
-          res <- .Call(rcorFunc, Rx, Ry)
+          res <- .Call("rcor", Rx, Ry, as.integer(tnormSel))
           c <- res$c
           d <- res$d
      }

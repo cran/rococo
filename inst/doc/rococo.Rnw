@@ -663,6 +663,11 @@ gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 \section{Change Log}
 
 \begin{description}
+\item[Version 1.1.5:] \hfill
+\begin{itemize}
+  \item registered C/C++ subroutines
+  \item cleanup and streamlining of C++ code
+\end{itemize}
 \item[Version 1.1.4:] \hfill
 \begin{itemize}
   \item added special options for dealing with cases in which observables

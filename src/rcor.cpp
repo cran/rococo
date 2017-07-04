@@ -23,46 +23,29 @@ void get_sums (NumericMatrix mat_x, NumericMatrix mat_y, IntegerVector perm,
     }
 }
 
-
-void rcor (SEXP matx, SEXP maty, double (*tnorm_fp)(double, double),
-	   double *sum, double *sum_t)
+RcppExport SEXP rcor (SEXP matx, SEXP maty, SEXP tnorm)
 {
-    int i;
+    int i, tnorm_sel = as<int>(tnorm);
 
     NumericMatrix mat_x(matx); 
     NumericMatrix mat_y(maty); 
 	
     IntegerVector perm(mat_x.nrow());	
-	
+
+    double (*tnorm_fp)(double, double), c, d;
+
+    switch(tnorm_sel)
+    {
+        case  1 : tnorm_fp = min_tnorm; break;
+        case  2 : tnorm_fp = prod_tnorm; break;
+        case  3 : tnorm_fp = lukasiewicz_tnorm; break;
+        default : tnorm_fp = min_tnorm;
+    }
+
     for (i = 0; i < mat_x.nrow(); i++)
 	perm[i] = i;
-		
-    get_sums(mat_x, mat_y, perm, tnorm_fp, sum, sum_t);	
-}
 
-RcppExport SEXP rcor_min (SEXP matx, SEXP maty)
-{
-    double c, d;
-	
-    rcor(matx, maty, min_tnorm, &c, &d);
-	
-    return List::create(_["c"] = c, _["d"] = d);
-}
-
-RcppExport SEXP rcor_prod (SEXP matx, SEXP maty)
-{
-    double c, d;
-	
-    rcor(matx, maty, prod_tnorm, &c, &d);
-
-    return List::create(_["c"] = c, _["d"] = d);
-}
-
-RcppExport SEXP rcor_lukasiewicz (SEXP matx, SEXP maty)
-{
-    double c, d;
-	
-    rcor(matx, maty, lukasiewicz_tnorm, &c, &d);
+    get_sums(mat_x, mat_y, perm, tnorm_fp, &c, &d);	
 	
     return List::create(_["c"] = c, _["d"] = d);
 }
