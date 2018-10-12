@@ -1,6 +1,12 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.7:
+- adapted C++ code to use STRICT_R_HEADERS
+
+Version 1.1.6:
+- minor correction of inst/CITATION
+
 Version 1.1.5:
 - registered C/C++ subroutines
 - cleanup and streamlining of C++ code

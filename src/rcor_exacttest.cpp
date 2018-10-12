@@ -1,3 +1,4 @@
+#include <float.h>
 #include <Rcpp.h>
 #include "tnorms.h"
 #include "rcor.h"
