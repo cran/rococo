@@ -1,6 +1,11 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.8:
+- changed e-mail address of maintainer
+- updated README.md and formatting of package vignette
+- updated CITATION file to newer format
+
 Version 1.1.7:
 - adapted C++ code to use STRICT_R_HEADERS
 

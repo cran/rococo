@@ -1,4 +1,4 @@
-\documentclass[article]{bioinf}
+\documentclass{ubmanual}
 
 \usepackage{amsmath,amssymb}
 \usepackage{hyperref}
@@ -12,14 +12,16 @@
 \title{{\Huge RoCoCo}\\[5mm]
   An R Package Implementing a \underline{Ro}bust Rank \underline{Co}rrelation
   \underline{Co}efficient and a Corresponding Test}
-\author{Ulrich Bodenhofer\affilmark{1} and
-       Martin Krone\affilmark{2}}
-\affiliation{\affilmark{1}Institute of Bioinformatics,
+\author{Ulrich Bodenhofer\affilmark{1,2} and
+       Martin Krone\affilmark{3}}
+\affiliation{\affilmark{1} School of Informatics, Communication and Media\\
+University of Applied Sciences Upper Austria\\
+Softwarepark 11, 4232 Hagenberg, Austria\\[2mm]
+{\grey\affilmark{2} previously with: Institute of Bioinformatics,
 Johannes Kepler University\\Altenberger Str.\ 69, 4040 Linz, Austria\\[2mm]
-\affilmark{2}Department of Computer Science\\
+\affilmark{3} previously with: Department of Computer Science\\
 Ostfalia University of Applied Sciences\\
-Salzdahlumer Str.\ 46/48, 38302 Wolfenb\"uttel, Germany\\[2mm]
-\email{rococo@bioinf.jku.at}}
+Salzdahlumer Str.\ 46/48, 38302 Wolfenb\"uttel, Germany}}
 
 \newcommand{\RoCoCo}{\texttt{rococo}}
 \newcommand{\Rcpp}{\texttt{Rcpp}}
@@ -64,7 +66,7 @@ rococoDate <- paste(month.name[rococoDateMonth], " ",
 @
 \newcommand{\RoCoCoVer}{\Sexpr{rococoVersion}}
 \newcommand{\RoCoCoDate}{\Sexpr{rococoDate}}
-\manualtitlepage[Version \RoCoCoVer, \RoCoCoDate]
+\manualtitlepage{Version \RoCoCoVer, \RoCoCoDate}{https://github.com/UBod/rococo/}
 
 \section*{Scope and Purpose of this Document}
 
@@ -659,66 +661,6 @@ gauss.cor(x1, y1)
 gauss.cor.test(x1, y1, alternative="two.sided")
 gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 @
-
-\section{Change Log}
-
-\begin{description}
-\item[Version 1.1.5:] \hfill
-\begin{itemize}
-  \item registered C/C++ subroutines
-  \item cleanup and streamlining of C++ code
-\end{itemize}
-\item[Version 1.1.4:] \hfill
-\begin{itemize}
-  \item added special options for dealing with cases in which observables
-  do not show any variation
-  \item fixed automatic computation of tolerances for cases where IQR is 0
-\end{itemize}
-\item[Version 1.1.3:] \hfill
-\begin{itemize}
-  \item vignette engine changed from Sweave to knitr
-  \item fix of on-demand loading of \verb+compiler+ package
-  \item random number generation in compiled code switched to R API
-  \item moved \verb+NEWS+ to \verb+inst/NEWS+
-  \item namespace fixes
-\end{itemize}
-\item[Version 1.1.2:] \hfill
-\begin{itemize}
-  \item updated citation
-  \item adapted dependency and linking to Rcpp version 0.11.1
-    (to avoid issues on Mac OS)
-  \item minor correction of package namespace
-  \item improvements of consistency of error and warning messages
-  \item adaptations of help pages and package vignette
-\end{itemize}
-\item[Version 1.1.1:] \hfill
-\begin{itemize}
-  \item adapted dependencies and linking to Rcpp version 0.11.0
-  \item cleared up package dependencies
-\end{itemize}
-\item[Version 1.1.0:] \hfill
-  \begin{itemize}
-  \item estimation of $p$-values now based on relative frequencies
-  \item Gaussian rank correlation estimator and test added
-  \item corresponding adaptations of man pages and vignette
-  \item updated citation
-  \item moved vignette to '\verb+vignettes+' according to the new guidelines
-  \end{itemize}
-\item[Version 1.0.1:] \hfill
-  \begin{itemize}
-  \item improved estimation of $p$-values
-  \item added exact computation of $p$-values (only for 10 or less samples)
-  \item corresponding adaptations of man pages and vignette
-  \end{itemize}
-\item[Version 1.0.0:] first official release, released October 3, 2011
-\end{description}
-
-\subsection{Upgrading to Version 1.1.1 or newer}
-
-Users who upgrade to Version 1.1.1 (or newer)
-from an older version should be aware that
-the package now requires Rcpp Version 0.11.0 (or newer). This issue can simply
-be solved by re-installing Rcpp from CRAN using \verb+install.packages("Rcpp")+.
 
 \section{How to Cite This Package}
 
