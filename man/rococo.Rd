@@ -56,17 +56,17 @@ rococo(x, y,
   Upon successful completion, the function returns the robust gamma rank
   correlation coefficient.
 }
-\author{Martin Krone & Ulrich Bodenhofer
-\email{rococo@bioinf.jku.at}}
-\references{\url{http://www.bioinf.jku.at/software/rococo/}
-  
+\author{Martin Krone and Ulrich Bodenhofer}
+\references{\url{https://github.com/UBod/rococo}
+
 U. Bodenhofer and F. Klawonn (2008).
 Robust rank correlation coefficients on the basis of fuzzy orderings:
 initial steps. \emph{Mathware Soft Comput.} \bold{15}(1):5-20.
 
 U. Bodenhofer, M. Krone, and F. Klawonn (2013).
 Testing noisy numerical data for monotonic association.
-\emph{Inform. Sci.} \bold{245}:21-37. DOI: 10.1016/j.ins.2012.11.026.}
+\emph{Inform. Sci.} \bold{245}:21-37.
+DOI: \doi{10.1016/j.ins.2012.11.026}.}
 \seealso{\code{\link{rococo.test}}}
 \examples{
 ## create data

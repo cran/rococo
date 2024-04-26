@@ -1,6 +1,9 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.9:
+- updates and corrections of help pages
+
 Version 1.1.8:
 - changed e-mail address of maintainer
 - updated README.md and formatting of package vignette

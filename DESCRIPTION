@@ -1,8 +1,8 @@
 Package: rococo
 Type: Package
 Title: Robust Rank Correlation Coefficient and Test
-Version: 1.1.8
-Date: 2024-04-22
+Version: 1.1.9
+Date: 2024-04-26
 Author: Martin Krone [aut], Ulrich Bodenhofer [aut,cre]
 Maintainer: Ulrich Bodenhofer <ulrich@bodenhofer.com>
 Description: Provides the robust gamma rank correlation coefficient as introduced by
@@ -22,5 +22,5 @@ VignetteBuilder: knitr
 LinkingTo: Rcpp
 Repository: CRAN
 NeedsCompilation: yes
-Packaged: 2024-04-22 06:58:37 UTC; ulrich
-Date/Publication: 2024-04-22 08:22:38 UTC
+Packaged: 2024-04-26 10:35:01 UTC; ulrich
+Date/Publication: 2024-04-26 11:50:02 UTC

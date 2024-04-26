@@ -38,13 +38,14 @@
   Upon successful completion, the function returns a list of class
   \code{htest} containing the results (see \code{\link{cor.test}}).
 }
-\author{Ulrich Bodenhofer
-\email{rococo@bioinf.jku.at}}
-\references{\url{http://www.bioinf.jku.at/software/rococo/}
+\author{Ulrich Bodenhofer}
+\references{\url{https://github.com/UBod/rococo}
 
-K. Boudt, J. Cornelissen and C. Croux (2012).
+K. Boudt, J. Cornelissen, and C. Croux (2012).
 The Gaussian rank correlation estimator: robustness properties.
-\emph{Stat. Comput.} \bold{22}(2):471-483.}
+\emph{Stat. Comput.} \bold{22}(2):471-483.
+DOI: \doi{10.1007/s11222-011-9237-0}.
+}
 \seealso{\code{\link{gauss.cor}}}
 \examples{
 ## create data
