@@ -13,16 +13,16 @@ rococoDate <- paste(month.name[rococoDateMonth], " ",
                      rococoDateYear, sep="")
 
 ## ----InstallRoCoCo,eval=FALSE-----------------------------------------
-#  install.packages("rococo")
+# install.packages("rococo")
 
 ## ----LoadRoCoCo,eval=FALSE--------------------------------------------
-#  library(rococo)
+# library(rococo)
 
 ## ----OpenVignette,eval=FALSE------------------------------------------
-#  vignette("rococo")
+# vignette("rococo")
 
 ## ----ShowHelp,eval=FALSE----------------------------------------------
-#  help(rococo)
+# help(rococo)
 
 ## ----ToyData,fig.width=5,fig.height=5.5,out.width='0.5\\textwidth'----
 x1 <- rnorm(15)
@@ -120,5 +120,5 @@ gauss.cor.test(x1, y1, alternative="two.sided")
 gauss.cor.test(~ Sepal.Length + Petal.Length, iris, alternative="two.sided")
 
 ## ----GetBibTeX,eval=FALSE---------------------------------------------
-#  toBibtex(citation("rococo"))
+# toBibtex(citation("rococo"))
 

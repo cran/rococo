@@ -1,6 +1,9 @@
 Change history of package rococo:
 =================================
 
+Version 1.1.10:
+- updated DESCRIPTION file to new format (Authors@R)
+
 Version 1.1.9:
 - updates and corrections of help pages
 

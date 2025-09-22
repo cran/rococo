@@ -1,4 +1,4 @@
-fc0b3924369ce04431a3f80bfedf9fea *DESCRIPTION
+230e45024368ec734fd2cb5ad4767150 *DESCRIPTION
 548cbf533a6f736f44ce3180a2d8cf07 *NAMESPACE
 792031e34d1ecf43d6003eea8cf432f0 *R/AllClasses.R
 8b7f0585207e0e3ef1ccb48802afabf0 *R/AllGenerics.R
@@ -8,13 +8,13 @@ aaa59b04bbb791975857a5ed227121cd *R/rococo.R
 cf85c60aa081370e9a324b131547f903 *R/rococo.test-methods.R
 f99fbdd8c80685a8768fdecbe342089b *R/show-methods.R
 6763b769cdfe915ecd85f8d47cae353d *README.md
-f61db891eb928123aba4412ca322f508 *build/partial.rdb
-541a69fed9ab4e2c29731e2c4b1b4207 *build/vignette.rds
+533839446f70bde34a1050627ce80586 *build/partial.rdb
+8d8e32f19d1ebd5755c71db80e0a96e8 *build/vignette.rds
 857b2a081625fb2f46498ff12167c3c4 *inst/CITATION
-b7a9e526f7b1bf31ddc942e497d43ea6 *inst/NEWS
-f86b0694df7a0c417a68d28d3f5b7fdd *inst/doc/rococo.R
+9626fe1ea8b20db36c864bfc92c19ac7 *inst/NEWS
+457a54abb7786ae36c9ada0d5f3bd97d *inst/doc/rococo.R
 0d4f255248e91cf79f48aa30eeaa2788 *inst/doc/rococo.Rnw
-b6db58d5cf3f607bfabe08c8038d09b0 *inst/doc/rococo.pdf
+da9678ecdec2e0ca718f53c0a8c0a1a7 *inst/doc/rococo.pdf
 aeebd02a7418fbe49e8598cce41af3b1 *man/RococoTestResult-class.Rd
 db55fe238bdb47faa6df2c27482a657f *man/gauss.cor.Rd
 241610f77ad99d42f9628d871aa47c01 *man/gauss.cor.test-methods.Rd
